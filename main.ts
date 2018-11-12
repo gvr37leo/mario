@@ -5,6 +5,20 @@
 /// <reference path="physicsbody.ts" />
 /// <reference path="physicsWorld.ts" />
 
+//voor mario is nodig
+
+//physicsworld met bodys
+//isGrounded
+//ray en boxcasting collisions en still and moving cast
+
+
+//camera
+//sprite en animaties
+//keybindings
+//mario/player class
+//enemy class
+
+
 
 
 var crret = createCanvas(500,500)

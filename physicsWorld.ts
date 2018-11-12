@@ -1,20 +1,21 @@
 class PhysicsWorld{
 
+    physicsBodys:PhysicsBody[]
     collisionMatrix:number[][]
 
     constructor(){
 
     }
 
-    update(){
+    update(dt:number){
 
     }
 
-    raycast(){
+    raycast(origin:Vector,dir:Vector){
 
     }
 
-    boxcast(){
+    boxcast(origin:Rect,dir:Vector){
 
     }
 

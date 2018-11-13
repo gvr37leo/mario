@@ -6,6 +6,7 @@
   "dependencies": {
     "eventsystemx": "^1.0.1",
     "express": "*",
+    "npm": "^6.4.1",
     "rect3x": "^1.0.0",
     "utilsx": "^1.11.0",
     "vectorx": "^3.3.1"

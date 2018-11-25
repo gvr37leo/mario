@@ -27,7 +27,17 @@ class PhysicsWorld{
     raycast(origin:Vector,dir:Vector):RaycastResult{
         var start = origin.c()
         var end = start.c().add(dir)
-        
+
+        var locations = this.gridTraversal(start,end)
+        for(var loc of locations){
+            
+        }
+    }
+
+    gridTraversal(start:Vector,end:Vector):Vector[]{
+        var result = []
+
+        return result
     }
 
     boxcast(origin:Rect,dir:Vector):Vector{

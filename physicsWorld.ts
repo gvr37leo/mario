@@ -55,30 +55,12 @@ class PhysicsWorld{
         var floor = (arr, i) => arr[i] = Math.floor(arr[i])
         var current = start.c().div(this.blockSize)
         var endscaled = end.c().div(this.blockSize)
-        var currentfloored = current.c().map(floor)
-        var endfloored = endscaled.c().map(floor)
         var result:Vector[] = []
-        var dir = current.to(endscaled)
-        var step = dir.c().map((arr,i) => arr[i] = Math.sign(arr[i]))
-
-        while(currentfloored != endfloored){
-            var tMax = new Vector(0,0)
-            var tDelta = new Vector(0,0)
-
-        //     result.push(currentfloored)
-
-        //     var xdist = (Math.ceil(current.x) - current.x) / dir.x
-        //     var ydist = (Math.ceil(current.y) - current.y) / dir.y
-            var bestindex = findbestIndex(tMax.vals,(dist) => -dist)
-            var smallestDist = tMax.vals[bestindex]
-
-            currentfloored.vals[bestindex] += step.vals[bestindex]
-            current.add(dir.c().scale(smallestDist))
-
+        var diagonalDistance = Math.max(...current.to(end).map((arr,i) => arr[i] = Math.abs(arr[i])).vals) 
+        for(var i = 0; i <= diagonalDistance; i++){
+            var t = diagonalDistance == 0 ? 0 : i / diagonalDistance;
+            result.push(current.lerp(endscaled,t).map(floor)) 
         }
-
-
-
         return result
     }
 

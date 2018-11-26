@@ -24,18 +24,53 @@ class PhysicsWorld{
         }
     }
 
+    getRect(gridpos:Vector,out:Rect){
+        out.min = gridpos.c().mul(this.blockSize)
+        out.max = out.min.c().add(this.blockSize)
+    }
+
     raycast(origin:Vector,dir:Vector):RaycastResult{
         var start = origin.c()
         var end = start.c().add(dir)
 
         var locations = this.gridTraversal(start,end)
+
+        var result = new RaycastResult(false,100)
+        var tempRect = new Rect(new Vector(0,0), new Vector(0,0))
+        var tempOut:[number,number] = [0,0]
+        
         for(var loc of locations){
-            
+            this.getRect(loc,tempRect)
+            if(tempRect.collideLine(start,end,tempOut)){
+                result.hit = true
+                if(tempOut[0] < result.relpos){
+                    result.relpos = tempOut[0]
+                }
+            }
         }
+        return result
     }
 
     gridTraversal(start:Vector,end:Vector):Vector[]{
-        var result = []
+        var floor = (arr, i) => arr[i] = Math.floor(arr[i])
+        var current = start.c().div(this.blockSize)
+        var endscaled = end.c().div(this.blockSize)
+        var currentfloored = start.map(floor)
+        var endfloored = end.map(floor)
+        var result:Vector[] = []
+
+        var dir = current.to(endscaled)
+        while(currentfloored != endfloored){
+            var xdist = 0
+            var ydist = 0
+            var distances = [xdist,ydist]
+            result.push(current.c().map(floor))
+            var smallestDist = distances[findbestIndex(distances,(dist) => -dist)]
+            current.add(dir.c().scale(smallestDist))
+
+        }
+
+
 
         return result
     }

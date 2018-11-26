@@ -36,6 +36,7 @@ var world = new PhysicsWorld([
 var mario = new Mario(new PhysicsBody(new Rect(new Vector(0,0), new Vector(40,40))))
 world.physicsBodys.push(mario.hitbox)
 
+debugger
 world.gridTraversal(new Vector(10,420), new Vector(300,40))
 
 var mainscene = new Scene(dt => {

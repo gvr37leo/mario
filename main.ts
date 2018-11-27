@@ -33,7 +33,8 @@ var world = new PhysicsWorld([
     [0,1,0,0,0,0],
     [1,1,1,1,0,1],
 ], new Vector(50,50))
-var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,0), new Vector(40,40))))
+var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,100), new Vector(40,40))))
+mario.physicsBody.vel.y = 1000000
 world.physicsBodys.push(mario.physicsBody)
 
 document.addEventListener('keydown',e => {
@@ -57,5 +58,6 @@ var currentscene = mainscene
 
 loop((dt) => {
     dt /= 1000
+    dt = 0.007
     currentscene.loop(dt)
 })

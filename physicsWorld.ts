@@ -24,10 +24,7 @@ class PhysicsWorld{
             body.vel.add(body.acc.c().add(this.gravity).scale(dt))
             var scaledVel = body.vel.c().scale(dt)
             var boxresult = this.boxcast(body.rect,scaledVel)
-            if(boxresult.hit){
-                console.log(1)
-            }
-            body.rect.relmove(scaledVel.c().scale(Math.max(boxresult.absLength - this.skinwidth,0)))
+            body.rect.relmove(scaledVel.c().normalize().scale(Math.max(boxresult.absLength - this.skinwidth,0)))
             if(boxresult.hit){
                 body.acc.overwrite(Vector.zero)
                 body.vel.overwrite(Vector.zero)
@@ -113,7 +110,7 @@ class PhysicsWorld{
         var current = start.c().div(this.blockSize)
         var endscaled = end.c().div(this.blockSize)
         var result:Vector[] = []
-        var diagonalDistance = Math.floor(Math.max(...current.to(endscaled).map((arr,i) => arr[i] = Math.abs(arr[i])).vals))
+        var diagonalDistance = Math.floor(Math.max(...current.c().floor().to(endscaled.c().floor()).vals))
         for(var i = 0; i <= diagonalDistance; i++){
             var t = diagonalDistance == 0 ? 0 : i / diagonalDistance;
             result.push(current.lerp(endscaled,t).floor()) 

@@ -1,15 +1,15 @@
 
 
 class Mario{
-
+    speed:number = 100
     health:number = 3
     sprite:Sprite
 
-    constructor(public hitbox:PhysicsBody){
+    constructor(public physicsBody:PhysicsBody){
 
     }
 
     draw(ctxt:CanvasRenderingContext2D){
-        this.hitbox.draw(ctxt)
+        this.physicsBody.draw(ctxt)
     }
 }

@@ -28,23 +28,29 @@ var canvas = crret.canvas
 var ctxt = crret.ctxt
 var camera = new Camera(new Vector(0, 0), new Vector(1,1))
 var world = new PhysicsWorld([
-    [0,0,0,1],
-    [0,1,0,0],
-    [0,1,0,0],
-    [1,1,1,1],
+    [0,0,0,1,0,0],
+    [0,1,0,0,0,0],
+    [0,1,0,0,0,0],
+    [1,1,1,1,0,1],
 ], new Vector(50,50))
-var mario = new Mario(new PhysicsBody(new Rect(new Vector(0,0), new Vector(40,40))))
-world.physicsBodys.push(mario.hitbox)
+var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,120), new Vector(40,40))))
+world.physicsBodys.push(mario.physicsBody)
+
+document.addEventListener('keydown',e => {
+    if(e.which == 32){
+        mario.physicsBody.vel.add(new Vector(0,-300))
+    }
+})
 
 var mainscene = new Scene(dt => {
     ctxt.clearRect(0,0,screensize.x,screensize.y)
     ctxt.setTransform(camera.scale.x,0,0,camera.scale.y,-camera.pos.x,-camera.pos.y)
-    world.update(dt)
-    mario.draw(ctxt)
 
-    // var rect = new Rect(new Vector(10,10), new Vector(100,100))
-    // var out:[number,number] = [1,1]
-    // var iscolliding = rect.collideLine(new Vector(1,1),new Vector(120,120),out)
+    mario.physicsBody.vel.add(getMoveInputYFlipped().scale(mario.speed * dt))
+    world.draw(ctxt)
+    mario.draw(ctxt)
+    world.update(dt)
+    
 })
 
 var currentscene = mainscene

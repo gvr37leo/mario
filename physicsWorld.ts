@@ -53,6 +53,7 @@ class PhysicsWorld{
         var end = start.c().add(dir)
 
         var locations = this.gridTraversal(start,end)
+        //check if the ray starts in a block
 
         var result = new RaycastResult(false,1)
         var tempRect = new Rect(new Vector(0,0), new Vector(0,0))

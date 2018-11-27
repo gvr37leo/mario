@@ -94,6 +94,11 @@ class Rect{
         this.max = this.min.c().add(size)
     }
 
+    relmove(pos:Vector){
+        this.min.add(pos)
+        this.max.add(pos)
+    }
+
     loop(callback:(v:Vector)=>void){
         var temp = this.max.c()
         

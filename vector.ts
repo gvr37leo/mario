@@ -177,14 +177,35 @@ class Vector{
             }   
         }
     }
+
+    floor(){
+        this.vals = this.vals.map(Math.floor)
+        return this
+    }
+
+    ceil(){
+        this.vals = this.vals.map(Math.ceil)
+        return this
+    }
+
+    round(){
+        this.vals = this.vals.map(Math.round)
+        return this
+    }
+
+    sign(){
+        this.vals = this.vals.map(Math.sign)
+        return this
+    }
+
+    inverse(){
+        this.vals = this.vals.map(v => -v)
+        return this
+    }
+    
+    static zero:Vector = new Vector(0,0)
+    static one:Vector = new Vector(1,1)
 }
-
-var V = function(){
-
-}
-
-V = Vector as any
-
 
 
 // (window as any).devtoolsFormatters = [

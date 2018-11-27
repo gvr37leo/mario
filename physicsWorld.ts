@@ -3,6 +3,7 @@ class PhysicsWorld{
     gravity:Vector = new Vector(0,9.8 * 40)
     physicsBodys:PhysicsBody[] = []
     collisionMatrix:number[][]
+    skinwidth = 0.01
 
     constructor(public grid:number[][], public blockSize:Vector){
 
@@ -22,12 +23,20 @@ class PhysicsWorld{
         for(var body of this.physicsBodys){
             body.vel.add(body.acc.c().add(this.gravity).scale(dt))
             var scaledVel = body.vel.c().scale(dt)
-            var raycastedVel = this.boxcast(body.rect,scaledVel)
-            body.pos = body.pos.c().add(raycastedVel)
+            var boxresult = this.boxcast(body.rect,scaledVel)
+            if(boxresult.hit){
+                console.log(1)
+            }
+            body.rect.relmove(scaledVel.c().scale(Math.max(boxresult.absLength - this.skinwidth,0)))
+            if(boxresult.hit){
+                body.acc.overwrite(Vector.zero)
+                body.vel.overwrite(Vector.zero)
+            }
         }
     }
 
-    boxcast(origin:Rect,dir:Vector):Vector{
+    boxcast(origin:Rect,dir:Vector):BoxcastResult{
+        var boxresult = new BoxcastResult(false,1,null)
         var corners = [
             origin.getPoint(new Vector(0,0)),
             origin.getPoint(new Vector(1,0)),
@@ -41,11 +50,15 @@ class PhysicsWorld{
         for(var corner of corners){
             var result = this.raycast(corner,dir)
             if(result.hit){
+                boxresult.hit = true
                 res.push(result.relpos)
             }
         }
         var smallest = res[findbestIndex(res,v => -v)]
-        return dir.scale(smallest)
+        boxresult.relLength = smallest
+        boxresult.dist = dir.c().scale(smallest)
+        boxresult.absLength = dir.length() * smallest
+        return boxresult
     }
 
     raycast(origin:Vector,dir:Vector):RaycastResult{
@@ -53,7 +66,9 @@ class PhysicsWorld{
         var end = start.c().add(dir)
 
         var locations = this.gridTraversal(start,end)
-        //check if the ray starts in a block
+        if(this.isOccupied(this.vec2flooredGridLocation(start.c()))){
+            return new RaycastResult(true,0)
+        }
 
         var result = new RaycastResult(false,1)
         var tempRect = new Rect(new Vector(0,0), new Vector(0,0))
@@ -90,22 +105,35 @@ class PhysicsWorld{
         
     }
 
+    vec2flooredGridLocation(v:Vector){
+        return v.div(this.blockSize).floor()
+    }
+
     gridTraversal(start:Vector,end:Vector):Vector[]{
-        var floor = (arr, i) => arr[i] = Math.floor(arr[i])
         var current = start.c().div(this.blockSize)
         var endscaled = end.c().div(this.blockSize)
         var result:Vector[] = []
         var diagonalDistance = Math.floor(Math.max(...current.to(endscaled).map((arr,i) => arr[i] = Math.abs(arr[i])).vals))
         for(var i = 0; i <= diagonalDistance; i++){
             var t = diagonalDistance == 0 ? 0 : i / diagonalDistance;
-            result.push(current.lerp(endscaled,t).map(floor)) 
+            result.push(current.lerp(endscaled,t).floor()) 
         }
         return result
     }
 }
 
-class RaycastResult{
+class BoxcastResult{
 
+    groundedx = [false,false]
+    groundedy = [false,false]
+    absLength = 0
+
+    constructor(public hit:boolean,public relLength:number, public dist:Vector){
+
+    }
+}
+
+class RaycastResult{
     constructor(public hit:boolean,public relpos:number){
 
     }

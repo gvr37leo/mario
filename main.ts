@@ -33,7 +33,7 @@ var world = new PhysicsWorld([
     [0,1,0,0,0,0],
     [1,1,1,1,0,1],
 ], new Vector(50,50))
-var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,120), new Vector(40,40))))
+var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,0), new Vector(40,40))))
 world.physicsBodys.push(mario.physicsBody)
 
 document.addEventListener('keydown',e => {
@@ -46,7 +46,7 @@ var mainscene = new Scene(dt => {
     ctxt.clearRect(0,0,screensize.x,screensize.y)
     ctxt.setTransform(camera.scale.x,0,0,camera.scale.y,-camera.pos.x,-camera.pos.y)
 
-    mario.physicsBody.vel.add(getMoveInputYFlipped().scale(mario.speed * dt))
+    mario.physicsBody.rect.relmove(getMoveInputYFlipped().scale(mario.speed * dt))
     world.draw(ctxt)
     mario.draw(ctxt)
     world.update(dt)

@@ -56,7 +56,7 @@ class PhysicsWorld{
         var current = start.c().div(this.blockSize)
         var endscaled = end.c().div(this.blockSize)
         var result:Vector[] = []
-        var diagonalDistance = Math.max(...current.to(end).map((arr,i) => arr[i] = Math.abs(arr[i])).vals) 
+        var diagonalDistance = Math.floor(Math.max(...current.to(endscaled).map((arr,i) => arr[i] = Math.abs(arr[i])).vals))
         for(var i = 0; i <= diagonalDistance; i++){
             var t = diagonalDistance == 0 ? 0 : i / diagonalDistance;
             result.push(current.lerp(endscaled,t).map(floor)) 

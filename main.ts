@@ -36,18 +36,15 @@ var world = new PhysicsWorld([
 var mario = new Mario(new PhysicsBody(new Rect(new Vector(0,0), new Vector(40,40))))
 world.physicsBodys.push(mario.hitbox)
 
-debugger
-world.gridTraversal(new Vector(10,420), new Vector(300,40))
-
 var mainscene = new Scene(dt => {
     ctxt.clearRect(0,0,screensize.x,screensize.y)
     ctxt.setTransform(camera.scale.x,0,0,camera.scale.y,-camera.pos.x,-camera.pos.y)
     world.update(dt)
     mario.draw(ctxt)
 
-    var rect = new Rect(new Vector(10,10), new Vector(100,100))
-    var out:[number,number] = [1,1]
-    var iscolliding = rect.collideLine(new Vector(1,1),new Vector(120,120),out)
+    // var rect = new Rect(new Vector(10,10), new Vector(100,100))
+    // var out:[number,number] = [1,1]
+    // var iscolliding = rect.collideLine(new Vector(1,1),new Vector(120,120),out)
 })
 
 var currentscene = mainscene

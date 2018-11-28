@@ -33,11 +33,6 @@ class PhysicsWorld{
                 var ray = new Vector(0,0)
                 ray.vals[i] = speed
 
-                var test = this.boxcast(body.rect,ray)
-                if(test.hit){
-                    console.log(1)
-                }
-
                 var boxcastResult = this.boxcast(body.rect,ray)
                 var raycastResult = boxcastResult.hitRay
                 var relHitLocation = raycastResult.relLocation()
@@ -45,11 +40,11 @@ class PhysicsWorld{
                     body.rect.min.vals[i] += relHitLocation.vals[i]
                     body.rect.max.vals[i] += relHitLocation.vals[i]
                     body.vel.vals[i] = 0
-                    body.grounded[i] = Math.sign(ray.vals[i])
+                    body.grounded.vals[i] = Math.sign(ray.vals[i])
                 }else{
                     body.rect.min.vals[i] += speed
                     body.rect.max.vals[i] += speed
-                    body.grounded[i] = 0
+                    body.grounded.vals[i] = 0
                 }
             }
 

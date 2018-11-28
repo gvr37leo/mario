@@ -26,7 +26,7 @@ var screensize = new Vector(800,500)
 var crret = createCanvas(screensize.x,screensize.y)
 var canvas = crret.canvas
 var ctxt = crret.ctxt
-var camera = new Camera(new Vector(0, 0), new Vector(1,1))
+var camera = new Camera(new Vector(0,0), new Vector(1,1))
 var world = new PhysicsWorld([
     [0,0,0,1,0,0],
     [0,1,0,0,0,0],
@@ -34,16 +34,16 @@ var world = new PhysicsWorld([
     [1,1,1,1,0,1],
 ], new Vector(50,50))
 var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(101,50), new Vector(40,40))))
-mario.physicsBody.vel.x = - 1000
 world.physicsBodys.push(mario.physicsBody)
 
 document.addEventListener('keydown',e => {
-    if(e.which == 32){
+    if(e.which == 32 && mario.physicsBody.grounded.y == 1){
         mario.physicsBody.vel.add(new Vector(0,mario.jumpforce))
     }
 })
 
 var mainscene = new Scene(dt => {
+    ctxt.setTransform(1,0,0,1,0,0)
     ctxt.clearRect(0,0,screensize.x,screensize.y)
     ctxt.setTransform(camera.scale.x,0,0,camera.scale.y,-camera.pos.x,-camera.pos.y)
 

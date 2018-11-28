@@ -33,7 +33,7 @@ var world = new PhysicsWorld([
     [0,1,0,0,0,0],
     [1,1,1,1,0,1],
 ], new Vector(50,50))
-var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(101,50), new Vector(40,40))))
+var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,0), new Vector(50,50))))
 world.physicsBodys.push(mario.physicsBody)
 
 document.addEventListener('keydown',e => {
@@ -53,9 +53,9 @@ var mainscene = new Scene(dt => {
     }
     mario.physicsBody.move = input.scale(mario.speed)
     
+    world.update(dt)
     world.draw(ctxt)
     mario.draw(ctxt)
-    world.update(dt)
     
 })
 

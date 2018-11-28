@@ -1,6 +1,6 @@
 class PhysicsWorld{
 
-    gravity:Vector = new Vector(0,9.8 * 40)
+    gravity:Vector = new Vector(0,400)
     physicsBodys:PhysicsBody[] = []
     collisionMatrix:number[][]
     skinwidth = 0.01
@@ -22,67 +22,105 @@ class PhysicsWorld{
     update(dt:number){
         for(var body of this.physicsBodys){
             body.vel.add(body.acc.c().add(this.gravity).scale(dt))
-            var scaledVel = body.vel.c().scale(dt)
-            var boxresult = this.boxcast(body.rect,scaledVel)
-            body.rect.relmove(scaledVel.c().normalize().scale(Math.max(boxresult.absLength - this.skinwidth,0)))
-            if(boxresult.hit){
-                body.acc.overwrite(Vector.zero)
-                body.vel.overwrite(Vector.zero)
+            var scaledVel = body.vel.c().add(body.move).scale(dt)
+
+            body.acc = this.gravity
+            body.vel.add(body.acc.c().scale(dt))
+            var dst2travelThisFrame = body.vel.c().add(body.move).scale(dt)
+
+            for(var i = 0; i < 2; i++){
+                var speed = dst2travelThisFrame.vals[i]
+                var ray = new Vector(0,0)
+                ray.vals[i] = speed
+
+                var test = this.boxcast(body.rect,ray)
+                if(test.hit){
+                    console.log(1)
+                }
+
+                var boxcastResult = this.boxcast(body.rect,ray)
+                var raycastResult = boxcastResult.hitRay
+                var relHitLocation = raycastResult.relLocation()
+                if(raycastResult.hit){
+                    body.rect.min.vals[i] += relHitLocation.vals[i]
+                    body.rect.max.vals[i] += relHitLocation.vals[i]
+                    body.vel.vals[i] = 0
+                    body.grounded[i] = Math.sign(ray.vals[i])
+                }else{
+                    body.rect.min.vals[i] += speed
+                    body.rect.max.vals[i] += speed
+                    body.grounded[i] = 0
+                }
             }
+
+            // var boxresult = this.boxcast(body.rect,scaledVel)
+            // body.rect.relmove(scaledVel.c().normalize().scale(Math.max(boxresult.absLength - this.skinwidth,0)))
+            // if(boxresult.hit){
+            //     body.acc.overwrite(Vector.zero)
+            //     body.vel.overwrite(Vector.zero)
+            // }
         }
     }
 
     boxcast(origin:Rect,dir:Vector):BoxcastResult{
-        var boxresult = new BoxcastResult(false,1,null)
-        var corners = [
-            origin.getPoint(new Vector(0,0)),
-            origin.getPoint(new Vector(1,0)),
-            origin.getPoint(new Vector(1,1)),
-            origin.getPoint(new Vector(0,1)),
-        ]
+        var boxresult = new BoxcastResult()
+        boxresult.firedRays = []
+        boxresult.hitRay = null
+        boxresult.hit = false
 
-        
+        var center = dir.c().sign()
+        var centerabs = origin.getPoint0Center(center)
+        var start = origin.getPoint0Center(center.c().rot2d( 1/4 * Tau).sign());
+        var end   = origin.getPoint0Center(center.c().rot2d(-1/4 * Tau).sign());
+        start.add(start.to(centerabs).normalize().scale(this.skinwidth))
+        end.add(end.to(centerabs).normalize().scale(this.skinwidth))
 
-        var res:number[] = [1]
-        for(var corner of corners){
-            var result = this.raycast(corner,dir)
-            if(result.hit){
-                boxresult.hit = true
-                res.push(result.relpos)
-            }
+        var rayOrigins:Vector[] = [start,end]
+
+        for(var rayOrigin of rayOrigins){
+            var result = this.raycast(rayOrigin,dir)
+            boxresult.firedRays.push(result)
         }
-        var smallest = res[findbestIndex(res,v => -v)]
-        boxresult.relLength = smallest
-        boxresult.dist = dir.c().scale(smallest)
-        boxresult.absLength = dir.length() * smallest
+        boxresult.hitRay = findBest(boxresult.firedRays,v => -v.absLength)
+        boxresult.hit = boxresult.hitRay.hit
         return boxresult
     }
 
     raycast(origin:Vector,dir:Vector):RaycastResult{
         var start = origin.c()
         var end = start.c().add(dir)
+        var result = new RaycastResult()
+        result.start = origin
+        result.dir = dir
 
         var locations = this.gridTraversal(start,end)
         if(this.isOccupied(this.vec2flooredGridLocation(start.c()))){
-            return new RaycastResult(true,0)
+            result.hit = true
+            result.absLength = 0
+            result.relLength = 0
+            return result
         }
 
-        var result = new RaycastResult(false,1)
+        result.hit = false
+        result.relLength = 1
+        result.absLength = dir.length()
         var tempRect = new Rect(new Vector(0,0), new Vector(0,0))
         var tempOut:[number,number] = [0,0]
         
         for(var loc of locations){
             if(!this.isOccupied(loc)){
                 continue
-            }
-            this.getRect(loc,tempRect)
-            if(tempRect.collideLine(start,end,tempOut)){
-                result.hit = true
-                if(tempOut[0] < result.relpos){
-                    result.relpos = tempOut[0]
+            }else{
+                this.getRect(loc,tempRect)
+                if(tempRect.collideLine(start,end,tempOut)){
+                    result.hit = true
+                    if(tempOut[0] < result.relLength){
+                        result.relLength = tempOut[0]
+                        result.absLength = result.relLength * result.absLength
+                    }
                 }
+                break
             }
-            break
         }
         return result
     }
@@ -110,7 +148,7 @@ class PhysicsWorld{
         var current = start.c().div(this.blockSize)
         var endscaled = end.c().div(this.blockSize)
         var result:Vector[] = []
-        var diagonalDistance = Math.floor(Math.max(...current.c().floor().to(endscaled.c().floor()).vals))
+        var diagonalDistance = Math.max(...current.c().floor().to(endscaled.c().floor()).vals.map(Math.abs))
         for(var i = 0; i <= diagonalDistance; i++){
             var t = diagonalDistance == 0 ? 0 : i / diagonalDistance;
             result.push(current.lerp(endscaled,t).floor()) 
@@ -120,18 +158,35 @@ class PhysicsWorld{
 }
 
 class BoxcastResult{
-
-    groundedx = [false,false]
-    groundedy = [false,false]
-    absLength = 0
-
-    constructor(public hit:boolean,public relLength:number, public dist:Vector){
+    public hit:boolean
+    public firedRays:RaycastResult[]
+    public hitRay:RaycastResult
+    
+    constructor(
+        
+    ){
 
     }
 }
 
 class RaycastResult{
-    constructor(public hit:boolean,public relpos:number){
+    public hit:boolean
+    public relLength:number
+    public absLength:number
+    public start:Vector
+    public dir:Vector
+
+    relLocation(){
+        return this.dir.c().scale(this.relLength)
+    }
+
+    absLocation(){
+        return this.relLocation().add(this.start)
+    }
+
+    constructor(
+
+        ){
 
     }
 }

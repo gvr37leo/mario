@@ -33,13 +33,13 @@ var world = new PhysicsWorld([
     [0,1,0,0,0,0],
     [1,1,1,1,0,1],
 ], new Vector(50,50))
-var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,100), new Vector(40,40))))
-mario.physicsBody.vel.x = 1000000
+var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(101,50), new Vector(40,40))))
+mario.physicsBody.vel.x = - 1000
 world.physicsBodys.push(mario.physicsBody)
 
 document.addEventListener('keydown',e => {
     if(e.which == 32){
-        mario.physicsBody.vel.add(new Vector(0,-300))
+        mario.physicsBody.vel.add(new Vector(0,mario.jumpforce))
     }
 })
 
@@ -47,7 +47,12 @@ var mainscene = new Scene(dt => {
     ctxt.clearRect(0,0,screensize.x,screensize.y)
     ctxt.setTransform(camera.scale.x,0,0,camera.scale.y,-camera.pos.x,-camera.pos.y)
 
-    mario.physicsBody.vel.add(getMoveInputYFlipped().scale(mario.speed))
+    var input = getMoveInputYFlipped()
+    if(input.length() > 0){
+        input.normalize()
+    }
+    mario.physicsBody.move = input.scale(mario.speed)
+    
     world.draw(ctxt)
     mario.draw(ctxt)
     world.update(dt)

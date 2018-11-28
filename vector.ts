@@ -205,6 +205,16 @@ class Vector{
     
     static zero:Vector = new Vector(0,0)
     static one:Vector = new Vector(1,1)
+
+    rot2d(theta:number){
+        var sin = Math.sin(theta)
+        var cos = Math.cos(theta)
+        var xp = this.x * cos - this.y * sin
+        var yp = this.y * cos + this.x * sin
+        this.x = xp
+        this.y = yp
+        return this
+    }
 }
 
 

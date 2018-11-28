@@ -11,16 +11,6 @@ function inRange(min: number, max: number, value: number):boolean{
     return value <= max && value >= min;
 }
 
-function min(a: number, b: number): number{
-    if(a < b)return a;
-    return b;
-}
-
-function max(a: number, b: number): number{
-    if(a > b)return a;
-    return b;
-}
-
 function clamp(val: number, min: number, max: number): number{
     return this.max(this.min(val, max), min)
 }
@@ -149,7 +139,7 @@ function getFiles(strings:string[]){
     return Promise.all(promises)
 }
 
-function findbestIndex<T>(list:T[], evaluator:(T) => number):number {
+function findbestIndex<T>(list:T[], evaluator:(v:T) => number):number {
     if (list.length < 1) {
         return -1;
     }
@@ -163,6 +153,10 @@ function findbestIndex<T>(list:T[], evaluator:(T) => number):number {
         }
     }
     return bestIndex
+}
+
+function findBest<T>(list:T[], evaluator:(v:T) => number):T{
+    return list[findbestIndex(list,evaluator)]
 }
 
 function createAndAppend(element: HTMLElement, html: string): HTMLElement {
@@ -197,3 +191,41 @@ function swap<T>(arr:T[],a:number = 0,b:number = 1){
     arr[a] = arr[b];
     arr[b] = temp;
 }
+
+var floor = Math.floor
+var ceil = Math.ceil
+var round = Math.round
+var sign = Math.sign
+var min = Math.min
+var max = Math.max
+
+var sincache = []
+var coscache = []
+
+function fillSinAndCosCache(precision:number){
+    for(var i = 0; i < precision; i++){
+        sincache.push(Math.sin(Tau / precision * i))
+        coscache.push(Math.cos(Tau / precision * i))
+    }
+}
+fillSinAndCosCache(360)
+
+function sin(theta:number){
+    return thetaArrayLookup(theta,sincache)
+}
+
+function cos(theta:number){
+    return thetaArrayLookup(theta,coscache)
+}
+
+function thetaArrayLookup(theta:number,arr:number[]){
+    var abs = arr.length * (theta / Tau)
+    var floor = floor(abs);
+    return lerpInArray(floor,abs - floor,arr)
+}
+
+function lerpInArray(i:number,t:number, arr:number[]){
+    return lerp(arr[mod(i,arr.length)], arr[mod( i + 1,arr.length)], t)
+}
+
+var Tau = Math.PI * 2

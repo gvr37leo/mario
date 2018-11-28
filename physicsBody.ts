@@ -1,7 +1,9 @@
 class PhysicsBody{
     
+    move:Vector = new Vector(0,0)
     vel:Vector = new Vector(0,0)
     acc:Vector = new Vector(0,0)
+    grounded:Vector = new Vector(0,0)
     onCollission:EventSystem<Collision>
     layer:number
     

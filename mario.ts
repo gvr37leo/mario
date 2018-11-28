@@ -1,7 +1,8 @@
 
 
 class Mario{
-    speed:number = 100
+    speed:number = 400
+    jumpforce:number = -500
     health:number = 3
     sprite:Sprite
 

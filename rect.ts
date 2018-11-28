@@ -83,6 +83,13 @@ class Rect{
         return this.min.c().add(this.size().mul(relativePos))
     }
 
+    getPoint0Center(relativePos:Vector):Vector{
+        var halfsize = this.size().scale(0.5);
+		var center = this.min.c().add(halfsize);
+        halfsize.mul(relativePos)
+		return center.add(halfsize);
+    }
+
     draw(ctxt:CanvasRenderingContext2D){
        var size = this.size()
        ctxt.fillRect(this.min.x,this.min.y,size.x,size.y)

@@ -38,11 +38,6 @@ var world = new PhysicsWorld([
 var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,0), new Vector(50,50))))
 world.physicsBodys.push(mario.physicsBody)
 
-input.keys[Key.Space].onchange.listen(v => {
-    if(v && mario.physicsBody.grounded.y == 1){
-        mario.physicsBody.vel.add(new Vector(0,mario.jumpforce))
-    }
-})
 
 var mainscene = new Scene(dt => {
     ctxt.setTransform(1,0,0,1,0,0)
@@ -56,6 +51,7 @@ var mainscene = new Scene(dt => {
     mario.physicsBody.move = moveinput.scale(mario.speed)
     
     world.update(dt)
+    mario.update(dt)
     world.draw(ctxt)
     mario.draw(ctxt)
     

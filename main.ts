@@ -24,16 +24,21 @@
 //keybindings
 //mario/player class
 //enemy class
-var screensize = new Vector(800,500)
+var screensize = new Vector(1600,500)
 var crret = createCanvas(screensize.x,screensize.y)
 var canvas = crret.canvas
 var ctxt = crret.ctxt
 var camera = new Camera(new Vector(0,0), new Vector(1,1))
 var world = new PhysicsWorld([
-    [0,0,0,1,0,0],
-    [0,1,0,0,0,0],
-    [0,1,0,0,0,0],
-    [1,1,1,1,0,1],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
+    [1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
+    [1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,1],
+    [1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+
 ], new Vector(50,50))
 var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,0), new Vector(50,50))))
 world.physicsBodys.push(mario.physicsBody)
@@ -44,14 +49,11 @@ var mainscene = new Scene(dt => {
     ctxt.clearRect(0,0,screensize.x,screensize.y)
     ctxt.setTransform(camera.scale.x,0,0,camera.scale.y,-camera.pos.x,-camera.pos.y)
 
-    var moveinput = input.getMoveInputYFlipped()
-    if(moveinput.length() > 0){
-        moveinput.normalize()
-    }
-    mario.physicsBody.move = moveinput.scale(mario.speed)
-    
+    mario.beforeWorldUpdate(dt)
     world.update(dt)
-    mario.update(dt)
+    mario.afterWorldUpdate(dt)
+    
+
     world.draw(ctxt)
     mario.draw(ctxt)
     

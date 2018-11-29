@@ -22,7 +22,6 @@ class PhysicsWorld{
     update(dt:number){
         for(var body of this.physicsBodys){
             body.vel.add(body.acc.c().add(this.gravity).scale(dt))
-            var scaledVel = body.vel.c().add(body.move).scale(dt)
 
             body.acc = this.gravity
             body.vel.add(body.acc.c().scale(dt))

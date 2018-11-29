@@ -168,10 +168,10 @@ class Input{
 
     getMoveInput():Vector{
         var dir = new Vector(0,0)
-        if(this.keys[Key.LeftArrow] || this.keys[Key.A])dir.x--//left
-        if(this.keys[Key.UpArrow] || this.keys[Key.W])dir.y++//up
-        if(this.keys[Key.RightArrow] || this.keys[Key.D])dir.x++//right
-        if(this.keys[Key.DownArrow] || this.keys[Key.S])dir.y--//down
+        if(this.keys[Key.LeftArrow].get() || this.keys[Key.A].get())dir.x--//left
+        if(this.keys[Key.UpArrow].get() || this.keys[Key.W].get())dir.y++//up
+        if(this.keys[Key.RightArrow].get() || this.keys[Key.D].get())dir.x++//right
+        if(this.keys[Key.DownArrow].get() || this.keys[Key.S].get())dir.y--//down
         return dir;
     }
     

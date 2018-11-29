@@ -17,7 +17,15 @@ class Mario{
         })
     }
 
-    update(dt:number){
+    beforeWorldUpdate(dt:number){
+        var moveinput = input.getMoveInputYFlipped()
+        if(moveinput.length() > 0){
+            moveinput.normalize()
+        }
+        this.physicsBody.move = moveinput.scale(this.speed)
+    }
+
+    afterWorldUpdate(dt:number){
         if(this.physicsBody.grounded.y == 1){
             this.jumpAmmo = this.jumpMaxAmmo
         }

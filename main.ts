@@ -8,6 +8,8 @@
 /// <reference path="sprite.ts" />
 /// <reference path="camera.ts" />
 /// <reference path="scene.ts" />
+/// <reference path="keymapper.ts" />
+
 
 
 //voor mario is nodig
@@ -36,8 +38,8 @@ var world = new PhysicsWorld([
 var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,0), new Vector(50,50))))
 world.physicsBodys.push(mario.physicsBody)
 
-document.addEventListener('keydown',e => {
-    if(e.which == 32 && mario.physicsBody.grounded.y == 1){
+input.keys[Key.Space].onchange.listen(v => {
+    if(v && mario.physicsBody.grounded.y == 1){
         mario.physicsBody.vel.add(new Vector(0,mario.jumpforce))
     }
 })
@@ -47,11 +49,11 @@ var mainscene = new Scene(dt => {
     ctxt.clearRect(0,0,screensize.x,screensize.y)
     ctxt.setTransform(camera.scale.x,0,0,camera.scale.y,-camera.pos.x,-camera.pos.y)
 
-    var input = getMoveInputYFlipped()
-    if(input.length() > 0){
-        input.normalize()
+    var moveinput = input.getMoveInputYFlipped()
+    if(moveinput.length() > 0){
+        moveinput.normalize()
     }
-    mario.physicsBody.move = input.scale(mario.speed)
+    mario.physicsBody.move = moveinput.scale(mario.speed)
     
     world.update(dt)
     world.draw(ctxt)

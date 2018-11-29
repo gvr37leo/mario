@@ -103,30 +103,8 @@ function* iter(n){
     while(i < n)yield i++;
 }
 
-var keys = {}
 
-document.addEventListener('keydown', (e) => {
-    keys[e.keyCode] = true
-})
 
-document.addEventListener('keyup', (e) => {
-    keys[e.keyCode] = false
-})
-
-function getMoveInput():Vector{
-    var dir = new Vector(0,0)
-    if(keys[37] || keys[65])dir.x--//left
-    if(keys[38] || keys[87])dir.y++//up
-    if(keys[39] || keys[68])dir.x++//right
-    if(keys[40] || keys[83])dir.y--//down
-    return dir;
-}
-
-function getMoveInputYFlipped():Vector{
-    var input = getMoveInput()
-    input.y *= -1
-    return input
-}
 
 function getFiles(strings:string[]){
     var promises = []
@@ -229,3 +207,18 @@ function lerpInArray(i:number,t:number, arr:number[]){
 }
 
 var Tau = Math.PI * 2
+
+class RNG{
+    public mod:number = 4294967296
+    public multiplier:number = 1664525
+    public increment:number = 1013904223
+
+    constructor(public seed:number){
+
+    }
+
+    next(){
+        this.seed = (this.multiplier * this.seed + this.increment) % this.mod
+        return this.seed
+    }
+}

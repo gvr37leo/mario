@@ -23,9 +23,13 @@ class PhysicsWorld{
         for(var body of this.physicsBodys){
             body.vel.add(body.acc.c().add(this.gravity).scale(dt))
 
-            body.acc = this.gravity
-            body.vel.add(body.acc.c().scale(dt))
-            var dst2travelThisFrame = body.vel.c().add(body.move).scale(dt)
+            //clamp speed
+            body.vel.map((arr, i) => {
+                arr[i] = clamp(arr[i],body.minSpeed.vals[i],body.maxSpeed.vals[i])
+            })
+            console.log(body.vel.x)
+
+            var dst2travelThisFrame = body.vel.c().scale(dt)
 
             for(var i = 0; i < 2; i++){
                 var speed = dst2travelThisFrame.vals[i]
@@ -46,13 +50,6 @@ class PhysicsWorld{
                     body.grounded.vals[i] = 0
                 }
             }
-
-            // var boxresult = this.boxcast(body.rect,scaledVel)
-            // body.rect.relmove(scaledVel.c().normalize().scale(Math.max(boxresult.absLength - this.skinwidth,0)))
-            // if(boxresult.hit){
-            //     body.acc.overwrite(Vector.zero)
-            //     body.vel.overwrite(Vector.zero)
-            // }
         }
     }
 

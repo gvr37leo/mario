@@ -63,6 +63,6 @@ var currentscene = mainscene
 
 loop((dt) => {
     dt /= 1000
-    dt = 0.007
+    dt = 0.016
     currentscene.loop(dt)
 })

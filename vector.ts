@@ -205,6 +205,10 @@ class Vector{
     
     static zero:Vector = new Vector(0,0)
     static one:Vector = new Vector(1,1)
+    static up:Vector = new Vector(0,-1)
+    static down:Vector = new Vector(0,1)
+    static left:Vector = new Vector(-1,0)
+    static right:Vector = new Vector(1,0)
 
     rot2d(theta:number){
         var sin = Math.sin(theta)

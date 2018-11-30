@@ -44,8 +44,13 @@ class Mario{
 
     beforeWorldUpdate(dt:number){
         var moveinput = input.getMoveInputYFlipped()
-        this.physicsBody.vel.add(new Vector(moveinput.x,0).scale(this.accForce * dt))
-        
+        if(moveinput.x != 0){
+            this.physicsBody.vel.x += moveinput.x * this.accForce * dt
+        }else{
+            var stopforce = Math.sign(-this.physicsBody.vel.x) * this.accForce * dt
+            var minmax = [0 ,stopforce].sort((a,b) => a-b)
+            this.physicsBody.vel.x += clamp(stopforce,minmax[0],minmax[1]) 
+        }
     }
 
     afterWorldUpdate(dt:number){

@@ -1,7 +1,9 @@
 class Sprite{
     
-    constructor(public imageData:ImageData){
+    renderer:SpriteRenderer
 
+    constructor(public imageData:ImageData){
+        this.renderer = new SpriteRenderer(this,[255,0,0],0)
     }
 
     static fromString(url:string):Promise<Sprite>{
@@ -29,11 +31,37 @@ class Sprite{
         var abspos = new Vector(0,0)
         v.loop2d(relpos => {
             abspos.overwrite(pos).add(relpos)
-            graphics.putPixel(abspos.x,abspos.y,this.imageData.data as any, this.index(relpos))
+            var color = this.renderer.shader(relpos)
+            graphics.putPixel(abspos.x,abspos.y, color, 0)
         })
     }
 
     index(v:Vector){
         return (this.imageData.width * v.y + v.x) * 4
+    }
+
+    getPixel(v:Vector):number[]{
+        var i = this.index(v)
+        return this.imageData.data.slice(i,i + 4) as any
+    }
+}
+
+class SpriteRenderer{
+
+
+
+    constructor(public sprite:Sprite,public modifiercolor:number[],public strength:number){
+
+    }
+
+    shader(relpos:Vector):number[]{
+        var color = this.sprite.getPixel(relpos)
+
+        for(var i = 0; i < 3; i++){
+            color[i] = lerp(color[i],this.modifiercolor[i],this.strength) 
+        }
+
+        return color
+
     }
 }

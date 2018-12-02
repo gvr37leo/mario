@@ -26,15 +26,17 @@ var crret = createCanvas(screensize.x,screensize.y)
 var canvas = crret.canvas
 var ctxt = crret.ctxt
 var graphics = new Graphics(ctxt)
-var sceneManager = new SceneManager(new MainScene())
-var groundSprite
+var groundSprite:Sprite
+var time = 0
 start()
 async function start(){
     groundSprite = await Sprite.fromString("images/ground.jpg")
+    var sceneManager = new SceneManager(new MainScene())
     
     loop((dt) => {
         // dt /= 1000
-        dt = 0.016
+        dt = 0.008
+        time += dt
 
         sceneManager.currentScene.loop(dt)
 

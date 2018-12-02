@@ -12,9 +12,6 @@ class Mario{
     isWallHanging:Box<number> = new Box(0)
 
     constructor(public physicsBody:PhysicsBody){
-
-        
-
         input.keys[Key.Space].onchange.listen(v => {
             if(v && (this.physicsBody.grounded.y == 1 || this.isWallHanging.get() != 0)){
                 this.jump()
@@ -76,9 +73,9 @@ class Mario{
     }
 
     draw(ctxt:CanvasRenderingContext2D){
+        this.sprite.renderer.strength = Math.sin(time - Tau / 4) * 0.5 + 0.5
         graphics.load()
-        groundSprite.draw(graphics,this.physicsBody.rect.min.c().round())
+        this.sprite.draw(graphics,this.physicsBody.rect.min.c().round())
         graphics.flush()
-        // this.physicsBody.draw(ctxt)
     }
 }

@@ -71,7 +71,7 @@ class Rect{
 
     collideBox(other:Rect){
         for(var i = 0; i < 2; i++){
-			if(!rangeOverlap(this.min[i], this.max[i], other.min[i], other.max[i])){
+			if(!rangeOverlap(this.min.vals[i], this.max.vals[i], other.min.vals[i], other.max.vals[i])){
 				return false;
 			}
 		}

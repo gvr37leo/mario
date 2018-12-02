@@ -2,6 +2,7 @@
 
 class Mario{
     accForce:number = 400 * 20
+    passiveStopForce = this.accForce * 0.4
 
     jumpforce:number = 400
     jumpMaxAmmo = 1
@@ -15,8 +16,9 @@ class Mario{
         
 
         input.keys[Key.Space].onchange.listen(v => {
-            if(v && this.physicsBody.grounded.y == 1 || this.isWallHanging.get() != 0){
+            if(v && (this.physicsBody.grounded.y == 1 || this.isWallHanging.get() != 0)){
                 this.jump()
+                // console.log(1)
             }
             else if(v && this.jumpAmmo > 0){
                 this.jump()
@@ -32,23 +34,29 @@ class Mario{
     }
 
     jump(){
-        
-        var jumpdirection = Vector.up.c()
         if(this.isWallHanging.get() != 0){
-            jumpdirection = new Vector(-this.isWallHanging.get(), -1).normalize()
+            this.physicsBody.vel.x = this.isWallHanging.get() * -1 * this.jumpforce
         }
         this.isWallHanging.set(0)
-        jumpdirection.scale(this.jumpforce)
-        this.physicsBody.vel.overwrite(jumpdirection)
+        this.physicsBody.vel.y = -1 * this.jumpforce
     }
 
     beforeWorldUpdate(dt:number){
         var moveinput = input.getMoveInputYFlipped()
+
+        if(moveinput.x == this.isWallHanging.get() * -1){
+            this.isWallHanging.set(0)
+        }
+
+        var accForce = this.accForce
+        if(this.physicsBody.grounded.y == 0){
+            accForce *= 0.3
+        }
         if(moveinput.x != 0){
-            this.physicsBody.vel.x += moveinput.x * this.accForce * dt
-        }else{
-            var stopforce = Math.sign(-this.physicsBody.vel.x) * this.accForce * dt
-            var minmax = [0 ,stopforce].sort((a,b) => a-b)
+            this.physicsBody.vel.x += moveinput.x * accForce * dt
+        }else if(this.physicsBody.grounded.y == 1){
+            var stopforce = Math.sign(-this.physicsBody.vel.x) * this.passiveStopForce * dt
+            var minmax = [0 ,-this.physicsBody.vel.x].sort((a,b) => a-b)
             this.physicsBody.vel.x += clamp(stopforce,minmax[0],minmax[1]) 
         }
     }

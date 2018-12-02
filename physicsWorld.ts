@@ -1,12 +1,23 @@
 class PhysicsWorld{
 
-    gravity:Vector = new Vector(0,400)
-    physicsBodys:PhysicsBody[] = []
-    collisionMatrix:number[][]
+    // gravity:Vector = new Vector(0,800)
+    
+    physicsBodysMap:Map<number,PhysicsBody[]> = new Map()
+    
     skinwidth = 0.01
+    // triggers:EventSystem<PhysicsBody>[][]
 
-    constructor(public grid:number[][], public blockSize:Vector){
+    constructor(public grid:number[][], public blockSize:Vector,public collisionMatrix:number[][]){
+        // var gridsize = arraySize2D(grid)
+        // createNDimArray([gridsize.y,gridsize.x],() => new EventSystem())
+    }
 
+    addPhysicsBody(body:PhysicsBody){
+        if(this.physicsBodysMap.has(body.layer)){
+            this.physicsBodysMap.get(body.layer).push(body)
+        }else{
+            this.physicsBodysMap.set(body.layer,[body])
+        }
     }
 
     draw(ctxt:CanvasRenderingContext2D){
@@ -20,37 +31,59 @@ class PhysicsWorld{
     }
 
     update(dt:number){
-        for(var body of this.physicsBodys){
-            body.vel.add(body.acc.c().add(this.gravity).scale(dt))
+        
+        for(var kvpair of this.physicsBodysMap){
+            var physicsBodys = kvpair[1]
+            var layer = kvpair[0]
+            for(var body of physicsBodys){
+                body.vel.add(body.acc.c().add(body.gravity).scale(dt))
+    
+                //clamp speed
+                body.vel.map((arr, i) => {
+                    arr[i] = clamp(arr[i],body.minSpeed.vals[i],body.maxSpeed.vals[i])
+                })
+    
+                var dst2travelThisFrame = body.vel.c().scale(dt)
+    
+                for(var i = 0; i < 2; i++){
+                    var speed = dst2travelThisFrame.vals[i]
+                    var ray = new Vector(0,0)
+                    ray.vals[i] = speed
+    
+                    var boxcastResult = this.boxcast(body.rect,ray)
+                    var raycastResult = boxcastResult.hitRay
+                    var relHitLocation = raycastResult.relLocation()
+                    if(raycastResult.hit){
+                        body.rect.min.vals[i] += relHitLocation.vals[i]
+                        body.rect.max.vals[i] += relHitLocation.vals[i]
+                        body.vel.vals[i] = 0
+                        body.grounded.vals[i] = Math.sign(ray.vals[i])
+                    }else{
+                        body.rect.min.vals[i] += speed
+                        body.rect.max.vals[i] += speed
+                        body.grounded.vals[i] = 0
+                    }
+                }
 
-            //clamp speed
-            body.vel.map((arr, i) => {
-                arr[i] = clamp(arr[i],body.minSpeed.vals[i],body.maxSpeed.vals[i])
-            })
-            console.log(body.vel.x)
-
-            var dst2travelThisFrame = body.vel.c().scale(dt)
-
-            for(var i = 0; i < 2; i++){
-                var speed = dst2travelThisFrame.vals[i]
-                var ray = new Vector(0,0)
-                ray.vals[i] = speed
-
-                var boxcastResult = this.boxcast(body.rect,ray)
-                var raycastResult = boxcastResult.hitRay
-                var relHitLocation = raycastResult.relLocation()
-                if(raycastResult.hit){
-                    body.rect.min.vals[i] += relHitLocation.vals[i]
-                    body.rect.max.vals[i] += relHitLocation.vals[i]
-                    body.vel.vals[i] = 0
-                    body.grounded.vals[i] = Math.sign(ray.vals[i])
-                }else{
-                    body.rect.min.vals[i] += speed
-                    body.rect.max.vals[i] += speed
-                    body.grounded.vals[i] = 0
+                var bodysToCollideWith:PhysicsBody[] = []
+                for(var i = 0; i < this.collisionMatrix[body.layer].length; i++){
+                    if(this.collisionMatrix[body.layer][i] == 1){
+                        var otherBodies = this.physicsBodysMap.get(i)
+                        if(otherBodies != null){
+                            bodysToCollideWith.splice(0,0,...this.physicsBodysMap.get(i))
+                        }
+                    }
+                }
+                for(var otherBody of bodysToCollideWith){
+                    if(body.rect.collideBox(otherBody.rect)){
+                        var collision = new Collision(otherBody)
+                        body.onCollission.trigger(collision)
+                        collision.onEnter.trigger()
+                    }
                 }
             }
         }
+        
     }
 
     boxcast(origin:Rect,dir:Vector):BoxcastResult{

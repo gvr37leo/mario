@@ -29,6 +29,7 @@ var crret = createCanvas(screensize.x,screensize.y)
 var canvas = crret.canvas
 var ctxt = crret.ctxt
 var camera = new Camera(new Vector(0,0), new Vector(1,1))
+enum Layers{Player,Enemies,Triggers}
 var world = new PhysicsWorld([
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -39,10 +40,23 @@ var world = new PhysicsWorld([
     [1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,1],
     [1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 
-], new Vector(50,50))
-var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,0), new Vector(50,50))))
-world.physicsBodys.push(mario.physicsBody)
+], new Vector(50,50),[
+    [0,1,0],
+    [1,0,0],
+    [1,0,0],
+])
+var mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,0), new Vector(50,50)),Layers.Player))
+world.addPhysicsBody(mario.physicsBody)
 
+var endlevelTrigger = new PhysicsBody(Rect.fromSize(new Vector(100,300), new Vector(50,50)),Layers.Triggers)
+endlevelTrigger.gravity.overwrite(Vector.zero)
+world.addPhysicsBody(endlevelTrigger)
+
+endlevelTrigger.onCollission.listen(col => {
+    col.onEnter.listen(() => {
+        currentscene = secondScene
+    })
+})
 
 var mainscene = new Scene(dt => {
     ctxt.setTransform(1,0,0,1,0,0)
@@ -53,10 +67,17 @@ var mainscene = new Scene(dt => {
     world.update(dt)
     mario.afterWorldUpdate(dt)
     
-
+    endlevelTrigger.rect.draw(ctxt)
     world.draw(ctxt)
     mario.draw(ctxt)
     
+})
+
+var secondScene = new Scene(dt => {
+    ctxt.setTransform(1,0,0,1,0,0)
+    ctxt.clearRect(0,0,screensize.x,screensize.y)
+
+    ctxt.fillRect(10,10,10,10)
 })
 
 var currentscene = mainscene

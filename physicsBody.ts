@@ -6,10 +6,10 @@ class PhysicsBody{
     minSpeed:Vector = new Vector(-400,-2000)
     acc:Vector = new Vector(0,0)
     grounded:Vector = new Vector(0,0)
-    onCollission:EventSystem<Collision>
-    layer:number
+    onCollission:EventSystem<Collision> = new EventSystem()
+    gravity:Vector = new Vector(0,800)
     
-    constructor(public rect:Rect){
+    constructor(public rect:Rect,public layer:number){
 
     }
 
@@ -27,9 +27,11 @@ class PhysicsBody{
 }
 
 class Collision{
+    onEnter:EventSystemVoid = new EventSystemVoid()
+    onHold:EventSystemVoid = new EventSystemVoid()
+    onExit:EventSystemVoid = new EventSystemVoid()
 
-    body:PhysicsBody
-    enter:EventSystemVoid
-    hold:EventSystemVoid
-    exit:EventSystemVoid
+    constructor(public body:PhysicsBody){
+
+    }
 }

@@ -222,3 +222,7 @@ class RNG{
         return this.seed
     }
 }
+
+function arraySize2D<T>(arr:T[][]):Vector{
+    return new Vector(arr[0].length,arr.length)
+}

@@ -5,7 +5,8 @@
   "main": "package.js",
   "dependencies": {
     "eventsystemx": "^1.0.1",
-    "express": "*",
+    "express": "^4.16.4",
+    "graphicsx": "^1.0.0",
     "npm": "^6.4.1",
     "rect3x": "^1.0.0",
     "utilsx": "^1.11.0",

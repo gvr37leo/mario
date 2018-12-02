@@ -28,10 +28,11 @@ var ctxt = crret.ctxt
 var graphics = new Graphics(ctxt)
 var groundSprite:Sprite
 var time = 0
+var sceneManager
 start()
 async function start(){
     groundSprite = await Sprite.fromString("images/ground.jpg")
-    var sceneManager = new SceneManager(new MainScene())
+    sceneManager = new SceneManager(new MainScene())
     
     loop((dt) => {
         // dt /= 1000

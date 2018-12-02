@@ -25,6 +25,7 @@ class MainScene implements IScene{
             [1,0,0],
         ])
         this.mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,0), new Vector(50,50)),Layers.Player))
+        this.mario.sprite = groundSprite
         this.world.addPhysicsBody(this.mario.physicsBody)
 
         this.endlevelTrigger = new PhysicsBody(Rect.fromSize(new Vector(100,300), new Vector(50,50)),Layers.Triggers)

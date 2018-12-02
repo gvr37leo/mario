@@ -76,6 +76,9 @@ class Mario{
     }
 
     draw(ctxt:CanvasRenderingContext2D){
-        this.physicsBody.draw(ctxt)
+        graphics.load()
+        groundSprite.draw(graphics,this.physicsBody.rect.min.c().round())
+        graphics.flush()
+        // this.physicsBody.draw(ctxt)
     }
 }

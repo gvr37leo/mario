@@ -13,6 +13,8 @@
 /// <reference path="scenes/mainScene.ts" />
 /// <reference path="scenes/secondScene.ts" />
 /// <reference path="scenes/menuScene.ts" />
+/// <reference path="ruleTile.ts" />
+/// <reference path="tileMap.ts" />
 
 
 

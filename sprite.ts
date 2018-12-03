@@ -5,7 +5,7 @@ class Sprite{
 
     constructor(public imageData:ImageData){
         this.size = new Vector(imageData.width,imageData.height)
-        this.renderer = new SpriteRenderer(this,[255,0,0,255],0)
+        this.renderer = new SpriteRenderer(this,[255,0,0,127],0)
     }
 
     static fromString(url:string):Promise<Sprite>{
@@ -85,8 +85,8 @@ class SpriteRenderer{
 
         for(var i = 0; i < 4; i++){
             
-            // outcolor[i] = lerp(incolor[i],this.modifiercolor[i],this.strength) 
-            outcolor[i] = incolor[i]
+            outcolor[i] = lerp(incolor[i],this.modifiercolor[i],this.strength) 
+            // outcolor[i] = incolor[i]
         }
 
         return outcolor

@@ -98,6 +98,16 @@ class SpriteRenderer{
         return v.add(center)
     }
 
+    flipHorizontal(v:Vector,center:number){
+        v.x = -(v.x - center) + center
+        return v
+    }
+
+    flipVertical(v:Vector,center:number){
+        v.y = -(v.y - center) + center
+        return v
+    }
+
     rotate90(v:Vector,times:number){
         this.matrix = this.matrices[times % this.matrices.length]
         var xp = this.matrix[0][0] * v.x + this.matrix[1][0] * v.y

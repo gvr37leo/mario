@@ -2,6 +2,7 @@ class Sprite{
     
     renderer:SpriteRenderer
     size:Vector
+    image:HTMLImageElement
 
     constructor(public imageData:ImageData){
         this.size = new Vector(imageData.width,imageData.height)
@@ -21,6 +22,7 @@ class Sprite{
                 context.drawImage(image, 0, 0 );
                 var myData = context.getImageData(0, 0, image.width, image.height);
                 var sprite = new Sprite(myData)
+                sprite.image = image
                 res(sprite)
             }    
         })
@@ -78,14 +80,17 @@ class SpriteRenderer{
 
     shader(relpos:Vector):number[]{
         this.temp.overwrite(relpos)
-        var incolor = this.sprite.getPixel( this.rotateAround(this.temp, this.center))
+        this.rotateAround(this.temp, this.center)
+        // this.flipOnYaxis(this.temp,this.center.x)
+        this.flipOnXaxis(this.temp,this.center.y)
+        var incolor = this.sprite.getPixel(this.temp)
         // var incolor = this.sprite.getPixel(this.temp)
         var outcolor = [0,0,0,0]
         
 
         for(var i = 0; i < 4; i++){
             
-            outcolor[i] = lerp(incolor[i],this.modifiercolor[i],this.strength) 
+            outcolor[i] = lerp(incolor[i],this.modifiercolor[i],0) 
             // outcolor[i] = incolor[i]
         }
 
@@ -98,12 +103,12 @@ class SpriteRenderer{
         return v.add(center)
     }
 
-    flipHorizontal(v:Vector,center:number){
+    flipOnYaxis(v:Vector,center:number){
         v.x = -(v.x - center) + center
         return v
     }
 
-    flipVertical(v:Vector,center:number){
+    flipOnXaxis(v:Vector,center:number){
         v.y = -(v.y - center) + center
         return v
     }

@@ -5,6 +5,7 @@ class MainScene implements IScene{
     world: PhysicsWorld;
     mario: Mario;
     endlevelTrigger: PhysicsBody;
+    tileMap: TileMap;
     
     onLoad() {
         this.camera = new Camera(new Vector(0,0), new Vector(1,1))
@@ -38,7 +39,7 @@ class MainScene implements IScene{
             })
         })
 
-
+        this.tileMap = new TileMap(this.world.blockSize,this.world.grid)
     }    
     
     loop(dt: number) {
@@ -52,6 +53,9 @@ class MainScene implements IScene{
         
         this.endlevelTrigger.rect.draw(ctxt)
         this.world.draw(ctxt)
+        // graphics.load()
+        this.tileMap.draw()
+        // graphics.flush()
         this.mario.draw(ctxt)
     }
 

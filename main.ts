@@ -18,6 +18,7 @@
 
 
 
+
 //voor mario is nodig
 //camera
 //sprite en animaties
@@ -31,6 +32,7 @@ var graphics = new Graphics(ctxt)
 var groundSprite:Sprite
 var time = 0
 var sceneManager
+
 start()
 async function start(){
     groundSprite = await Sprite.fromString("images/ground.jpg")

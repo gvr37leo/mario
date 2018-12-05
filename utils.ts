@@ -176,37 +176,36 @@ var round = Math.round
 var sign = Math.sign
 var min = Math.min
 var max = Math.max
-
+var Tau = Math.PI * 2
 var sincache = []
 var coscache = []
 
 function fillSinAndCosCache(precision:number){
     for(var i = 0; i < precision; i++){
-        sincache.push(Math.sin(Tau / precision * i))
-        coscache.push(Math.cos(Tau / precision * i))
+        sincache.push(Math.sin((Tau / precision) * i))
+        coscache.push(Math.cos((Tau / precision) * i))
     }
 }
 fillSinAndCosCache(360)
 
-function sin(theta:number){
+function sinCached(theta:number){
     return thetaArrayLookup(theta,sincache)
 }
 
-function cos(theta:number){
+function cosCached(theta:number){
     return thetaArrayLookup(theta,coscache)
 }
 
 function thetaArrayLookup(theta:number,arr:number[]){
     var abs = arr.length * (theta / Tau)
-    var floor = floor(abs);
-    return lerpInArray(floor,abs - floor,arr)
+    var floored = floor(abs);
+    return lerpInArray(floored,abs - floored,arr)
 }
 
 function lerpInArray(i:number,t:number, arr:number[]){
     return lerp(arr[mod(i,arr.length)], arr[mod( i + 1,arr.length)], t)
 }
 
-var Tau = Math.PI * 2
 
 class RNG{
     public mod:number = 4294967296
@@ -225,4 +224,13 @@ class RNG{
 
 function arraySize2D<T>(arr:T[][]):Vector{
     return new Vector(arr[0].length,arr.length)
+}
+
+function timeFunction(iterations:number,cb:(i:number) => void){
+    var begin = Date.now()
+    for(var i = 0; i < iterations; i++){
+        cb(i)
+    }
+    var end = Date.now()
+    return end - begin
 }

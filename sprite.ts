@@ -9,6 +9,10 @@ class Sprite{
         this.renderer = new SpriteRenderer(this,[255,0,0,127],0)
     }
 
+    static loadImagesFromString(urls:string[]):Promise<Sprite[]>{
+        return Promise.all(urls.map(s => Sprite.fromString(s)))
+    }
+
     static fromString(url:string):Promise<Sprite>{
         var image = new Image()
         image.src = url

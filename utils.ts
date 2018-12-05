@@ -156,6 +156,11 @@ function line(ctxt:CanvasRenderingContext2D,a:Vector,b:Vector){
     ctxt.stroke()
 }
 
+function coserp(a:number,b:number,r:number):number{
+    var cosr = 1 - (cosCached(r * Math.PI) * 0.5 + 0.5)
+    return lerp(a,b,cosr)
+}
+
 function lerp(a:number,b:number,r:number):number{
     return a + to(a,b) * r
 }
@@ -233,4 +238,10 @@ function timeFunction(iterations:number,cb:(i:number) => void){
     }
     var end = Date.now()
     return end - begin
+}
+
+function sort3(arr:number[]){
+    if(arr[0] > arr[1])swap(arr,0,1)
+    if(arr[1] > arr[2])swap(arr,1,2)
+    if(arr[0] > arr[1])swap(arr,0,1)
 }

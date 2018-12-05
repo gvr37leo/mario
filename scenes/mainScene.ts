@@ -26,6 +26,7 @@ class MainScene implements IScene{
             [1,0,0],
         ])
         this.mario = new Mario(new PhysicsBody(Rect.fromSize(new Vector(0,0), new Vector(50,50)),Layers.Player))
+        this.camera.focus = this.mario.physicsBody
         this.mario.sprite = groundSprite
         this.world.addPhysicsBody(this.mario.physicsBody)
 
@@ -35,7 +36,7 @@ class MainScene implements IScene{
 
         this.endlevelTrigger.onCollission.listen(col => {
             col.onEnter.listen(() => {
-                sceneManager.loadScene(new SecondScene())
+                // sceneManager.loadScene(new SecondScene())
             })
         })
 
@@ -45,11 +46,19 @@ class MainScene implements IScene{
     loop(dt: number) {
         ctxt.setTransform(1,0,0,1,0,0)
         ctxt.clearRect(0,0,screensize.x,screensize.y)
-        ctxt.setTransform(this.camera.scale.x,0,0,this.camera.scale.y,-this.camera.pos.x,-this.camera.pos.y)
+
         
         this.mario.beforeWorldUpdate(dt)
         this.world.update(dt)
         this.mario.afterWorldUpdate(dt)
+        
+        this.camera.update()
+        ctxt.setTransform(this.camera.scale.x,0,0,this.camera.scale.y,
+            // 0,
+            // 0,
+            -this.camera.pos.x,
+            -this.camera.pos.y,
+        )
         
         this.endlevelTrigger.rect.draw(ctxt)
         this.world.draw(ctxt)
@@ -57,6 +66,7 @@ class MainScene implements IScene{
         this.tileMap.draw()
         // graphics.flush()
         this.mario.draw(ctxt)
+        this.camera.currentTarget.draw(ctxt)
     }
 
     onDestory() {

@@ -20,9 +20,9 @@
 
 
 //voor mario is nodig
-//camera
-//sprite en animaties
-//enemy class
+//camera tracking
+//sprites
+//enemys
 
 var screensize = new Vector(1600,500)
 var crret = createCanvas(screensize.x,screensize.y)
@@ -32,10 +32,12 @@ var graphics = new Graphics(ctxt)
 var groundSprite:Sprite
 var time = 0
 var sceneManager
+var sprites
 
 start()
 async function start(){
-    groundSprite = await Sprite.fromString("images/ground.jpg")
+    sprites = await Sprite.loadImagesFromString(["images/ground.jpg","images/air.png","images/full.png","images/half.png","images/quarter.png"])
+    groundSprite = sprites[0]
     sceneManager = new SceneManager(new MainScene())
     
     loop((dt) => {

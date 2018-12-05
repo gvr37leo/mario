@@ -74,8 +74,9 @@ class Mario{
 
     draw(ctxt:CanvasRenderingContext2D){
         this.sprite.renderer.strength = Math.sin(time - Tau / 4) * 0.5 + 0.5
-        graphics.load()
-        this.sprite.draw(graphics,this.physicsBody.rect.min.c().round())
-        graphics.flush()
+        // graphics.load()
+        ctxt.drawImage(this.sprite.image,this.physicsBody.rect.min.x,this.physicsBody.rect.min.y)
+        // this.sprite.draw(graphics,this.physicsBody.rect.min.c().round())
+        // graphics.flush()
     }
 }

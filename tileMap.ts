@@ -1,6 +1,6 @@
 class TileMap{
 
-    tileCache:RuleTile[] = []
+    tileCache:IGetSprite[] = []
     
 
 
@@ -15,11 +15,12 @@ class TileMap{
         var size = arraySize2D(this.grid)
         size.loop2d(v => {
             var ruletile = this.tileCache[this.grid[v.y][v.x]]
-            if(this.grid[v.y][v.x] == 1){
-                var abspos = v.c().mul(this.blockSize)
-                // groundSprite.draw(graphics,abspos)
-                ctxt.drawImage(groundSprite.image, abspos.x, abspos.y)
 
+            var sprite = ruletile.getSprite(v)
+
+            if(sprite != null){
+                var abspos = v.c().mul(this.blockSize)
+                ctxt.drawImage(sprite.image, abspos.x, abspos.y)
             }
         })
     }

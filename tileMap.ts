@@ -1,8 +1,8 @@
 class TileMap{
 
     tileCache:IGetSprite[] = []
-    
 
+    
 
     constructor(public blockSize:Vector, public grid:number[][]){
         

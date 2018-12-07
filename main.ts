@@ -13,7 +13,7 @@
 /// <reference path="scenes/mainScene.ts" />
 /// <reference path="scenes/secondScene.ts" />
 /// <reference path="scenes/menuScene.ts" />
-/// <reference path="ruleTile.ts" />
+/// <reference path="tiles.ts" />
 /// <reference path="tileMap.ts" />
 
 
@@ -33,11 +33,19 @@ var groundSprite:Sprite
 var time = 0
 var sceneManager
 var sprites
+var airSprite
+var fullSprite
+var halfSprite
+var quarterSprite
 
 start()
 async function start(){
     sprites = await Sprite.loadImagesFromString(["images/ground.jpg","images/air.png","images/full.png","images/half.png","images/quarter.png"])
     groundSprite = sprites[0]
+    airSprite = sprites[1]
+    fullSprite = sprites[2]
+    halfSprite = sprites[3]
+    quarterSprite = sprites[4]
     sceneManager = new SceneManager(new MainScene())
     
     loop((dt) => {

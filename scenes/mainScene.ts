@@ -1,11 +1,11 @@
 enum Layers{Player,Enemies,Triggers}
 
 class MainScene implements IScene{
-    camera: Camera;
-    world: PhysicsWorld;
-    mario: Mario;
-    endlevelTrigger: PhysicsBody;
-    tileMap: TileMap;
+    camera: Camera
+    world: PhysicsWorld
+    mario: Mario
+    endlevelTrigger: PhysicsBody
+    tileMaps: TileMap[]
     
     onLoad() {
         this.camera = new Camera(new Vector(0,0), new Vector(1,1))
@@ -40,7 +40,10 @@ class MainScene implements IScene{
             })
         })
 
-        this.tileMap = new TileMap(this.world.blockSize,this.world.grid)
+        var background = new TileMap(this.world.blockSize,[[]])
+        var ground = new TileMap(this.world.blockSize,this.world.grid)
+        var foreground = new TileMap(this.world.blockSize,[[]])
+        this.tileMaps = [background,ground,foreground]
     }    
     
     loop(dt: number) {
@@ -63,7 +66,9 @@ class MainScene implements IScene{
         this.endlevelTrigger.rect.draw(ctxt)
         this.world.draw(ctxt)
         // graphics.load()
-        this.tileMap.draw()
+        for(var tileMap of this.tileMaps){
+            tileMap.draw()
+        }
         // graphics.flush()
         this.mario.draw(ctxt)
         this.camera.currentTarget.draw(ctxt)

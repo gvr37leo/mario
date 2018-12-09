@@ -45,12 +45,9 @@ class RuleTile implements IGetSprite{
 }
 
 class Rule {
-    spriteIndex:number
-    adjacencyMatrix:number[][] = [
-        [-1, -1, -1],
-        [-1, -1, -1],
-        [-1, -1, -1],
-    ]
+    constructor(public spriteIndex:number,public adjacencyMatrix:number[][]){
+
+    }
 }
 
 class AnimatedTile implements IGetSprite{

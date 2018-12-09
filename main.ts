@@ -15,6 +15,10 @@
 /// <reference path="scenes/menuScene.ts" />
 /// <reference path="tiles.ts" />
 /// <reference path="tileMap.ts" />
+/// <reference path="assets/ruleTiles.ts" />
+/// <reference path="assets/maps.ts" />
+
+
 
 
 
@@ -36,7 +40,7 @@ var sprites
 var airSprite
 var fullSprite
 var halfSprite
-var quarterSprite
+var quarterSprite;
 
 start()
 async function start(){

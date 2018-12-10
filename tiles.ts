@@ -1,13 +1,13 @@
 
 
-interface IGetSprite{
+interface ITile{
     getSprite(pos:Vector):Sprite
 }
 
-class RuleTile implements IGetSprite{
+class RuleTile implements ITile{
     
     id:number
-    constructor(public sprites:Sprite[], public rules:Rule[],public grid:number[][]){
+    constructor(public rules:Rule[],public grid:number[][]){
 
     }
 
@@ -17,10 +17,10 @@ class RuleTile implements IGetSprite{
             var rule = this.rules[i]
 
             if(this.compliesToRule(rule,pos)){
-                return this.sprites[rule.spriteIndex]
+                return rule.sprite
             }
         }
-        return this.sprites[0]
+        return this.rules[0].sprite
     }
 
     compliesToRule(rule:Rule,pos:Vector):boolean{
@@ -45,12 +45,12 @@ class RuleTile implements IGetSprite{
 }
 
 class Rule {
-    constructor(public spriteIndex:number,public adjacencyMatrix:number[][]){
+    constructor(public sprite:Sprite,public adjacencyMatrix:number[][]){
 
     }
 }
 
-class AnimatedTile implements IGetSprite{
+class AnimatedTile implements ITile{
     
     time:number = 0
 
@@ -68,7 +68,7 @@ class AnimatedTile implements IGetSprite{
 
 }
 
-class StaticTile implements IGetSprite{
+class StaticTile implements ITile{
     constructor(public sprite:Sprite){
 
     }

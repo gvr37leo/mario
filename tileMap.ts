@@ -1,6 +1,6 @@
 class TileMap{
 
-    tileCache:IGetSprite[] = []
+    tileCache:ITile[] = []
 
     
 

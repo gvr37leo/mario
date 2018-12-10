@@ -1,73 +1,71 @@
-
+var groundRuleTile
 function setupAssets(){
-    var groundRuleTile = new RuleTile([
-        fullSprite,halfSprite,quarterSprite
-    ],[
-        new Rule(1,[
+        groundRuleTile = new RuleTile([
+        new Rule(fullSprite,[
             [-1,-2,-1],
             [-2,-1, 0],
             [-1, 0,-1],
         ]),
-        new Rule(2,[
+        new Rule(fullSprite,[
             [-1,-2,-1],
             [ 0,-1,-2],
             [-1, 0,-1],
         ]),
-        new Rule(3,[
+        new Rule(fullSprite,[
             [-1, 0,-1],
             [-2,-1, 0],
             [-1,-2,-1],
         ]),
-        new Rule(4,[
+        new Rule(fullSprite,[
             [-1, 0,-1],
             [ 0,-1,-2],
             [-1,-2,-1],
         ]),
 
 
-        new Rule(5,[
+        new Rule(fullSprite,[
             [-1,-2,-1],
             [ 0,-1, 0],
             [-1, 0,-1],
         ]),
-        new Rule(6,[
+        new Rule(fullSprite,[
             [-1, 0,-1],
             [ 0,-1,-2],
             [-1, 0,-1],
         ]),
-        new Rule(7,[
+        new Rule(fullSprite,[
             [-1, 0,-1],
             [ 0,-1, 0],
             [-1,-2,-1],
         ]),
-        new Rule(8,[
+        new Rule(fullSprite,[
             [-1, 0,-1],
             [-2,-1, 0],
             [-1, 0,-1],
         ]),
 
-        new Rule(9,[
+        new Rule(fullSprite,[
             [-2, 0,-1],
             [ 0,-1, 0],
             [-1, 0,-1],
         ]),
-        new Rule(10,[
+        new Rule(fullSprite,[
             [-1, 0,-2],
             [ 0,-1, 0],
             [-1, 0,-1],
         ]),
-        new Rule(11,[
+        new Rule(fullSprite,[
             [-1, 0,-1],
             [ 0,-1, 0],
             [-1, 0,-2],
         ]),
-        new Rule(12,[
+        new Rule(fullSprite,[
             [-1, 0,-1],
             [ 0,-1, 0],
             [-2, 0,-1],
         ]),
 
-        new Rule(0,[
+        new Rule(fullSprite,[
             [-1, 0,-1],
             [ 0,-1, 0],
             [-1, 0,-1],

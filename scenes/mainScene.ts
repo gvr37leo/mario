@@ -10,17 +10,7 @@ class MainScene implements IScene{
     onLoad() {
         this.camera = new Camera(new Vector(0,0), new Vector(1,1))
         
-        this.world = new PhysicsWorld([
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
-            [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
-            [1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
-            [1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,1],
-            [1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-
-        ], new Vector(50,50),[
+        this.world = new PhysicsWorld(level1, new Vector(50,50),[
             [0,1,0],
             [1,0,0],
             [1,0,0],
@@ -43,7 +33,7 @@ class MainScene implements IScene{
         var background = new TileMap(this.world.blockSize,[[]])
         var ground = new TileMap(this.world.blockSize,this.world.grid)
         ground.tileCache = [
-            new RuleTile()
+            groundRuleTile
         ]
         var foreground = new TileMap(this.world.blockSize,[[]])
         this.tileMaps = [background,ground,foreground]
@@ -60,8 +50,6 @@ class MainScene implements IScene{
         
         this.camera.update()
         ctxt.setTransform(this.camera.scale.x,0,0,this.camera.scale.y,
-            // 0,
-            // 0,
             -this.camera.pos.x,
             -this.camera.pos.y,
         )

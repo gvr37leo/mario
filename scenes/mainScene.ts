@@ -33,8 +33,10 @@ class MainScene implements IScene{
         var background = new TileMap(this.world.blockSize,[[]])
         var ground = new TileMap(this.world.blockSize,this.world.grid)
         ground.tileCache = [
+            new StaticTile(airSprite),
             groundRuleTile
-        ]
+        ];
+        groundRuleTile.grid = this.world.grid
         var foreground = new TileMap(this.world.blockSize,[[]])
         this.tileMaps = [background,ground,foreground]
     }    

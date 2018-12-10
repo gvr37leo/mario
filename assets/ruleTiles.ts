@@ -1,4 +1,4 @@
-var groundRuleTile
+var groundRuleTile:RuleTile
 function setupAssets(){
         groundRuleTile = new RuleTile([
         new Rule(fullSprite,[

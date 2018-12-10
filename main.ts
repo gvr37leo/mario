@@ -50,6 +50,7 @@ async function start(){
     fullSprite = sprites[2]
     halfSprite = sprites[3]
     quarterSprite = sprites[4]
+    setupAssets()
     sceneManager = new SceneManager(new MainScene())
     
     loop((dt) => {

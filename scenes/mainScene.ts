@@ -43,8 +43,9 @@ class MainScene implements IScene{
     
     loop(dt: number) {
         ctxt.setTransform(1,0,0,1,0,0)
-        ctxt.clearRect(0,0,screensize.x,screensize.y)
-
+        ctxt.fillStyle = '#00e9ff'
+        ctxt.fillRect(0,0,screensize.x,screensize.y)
+        ctxt.fillStyle = '#000'
         
         this.mario.beforeWorldUpdate(dt)
         this.world.update(dt)

@@ -6,9 +6,11 @@ interface ITile{
 
 class RuleTile implements ITile{
     
-    id:number
-    constructor(public rules:Rule[],public grid:number[][]){
-
+    
+    private gridSize: Rect;
+    constructor(public id:number, public rules:Rule[],public grid:number[][]){
+        
+        
     }
 
 
@@ -25,20 +27,29 @@ class RuleTile implements ITile{
 
     compliesToRule(rule:Rule,pos:Vector):boolean{
         var result = true
+        this.gridSize = new Rect(Vector.zero.c(),arraySize2D(this.grid).sub(Vector.one));
         arraySize2D(rule.adjacencyMatrix).loop2d(v => {
-            var abs = v.c().add(pos)
-            var adjacencyCondition = rule.adjacencyMatrix[v.y][v.x]
-            var gridValue = this.grid[abs.y][abs.x]
-            if(adjacencyCondition == -1){//grey
-            }else if(adjacencyCondition == -2 && gridValue == this.id){//red
-                result = false
-            }else if(adjacencyCondition != gridValue){//green
-                result = false
+            var abs = v.c().add(pos).sub(Vector.one)
+
+            if(this.gridSize.collidePoint(abs)){
+                var adjacencyCondition = rule.adjacencyMatrix[v.y][v.x]
+                var gridValue = this.grid[abs.y][abs.x]
+                
+                if(adjacencyCondition == -1){//grey
+                }else if(adjacencyCondition == -2){//red
+                    if(gridValue == this.id){
+                        result = false
+                    }
+                }else if(adjacencyCondition != gridValue){//green
+                    result = false
+                }
+                if(result == false){
+                    v.y = 3
+                    v.x = 3
+                }
             }
-            if(result == false){
-                v.y = 3
-                v.x = 3
-            }
+
+            
         })
         return result
     }

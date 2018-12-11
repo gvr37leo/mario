@@ -57,7 +57,7 @@ class MainScene implements IScene{
         )
         
         this.endlevelTrigger.rect.draw(ctxt)
-        this.world.draw(ctxt)
+        // this.world.draw(ctxt)
         // graphics.load()
         for(var tileMap of this.tileMaps){
             tileMap.draw()
